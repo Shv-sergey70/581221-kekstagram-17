@@ -1,5 +1,6 @@
 'use strict';
 
+var ESC_KEY = 'Escape';
 var USERS_PHOTOS_NUMBER = 25;
 var MIN_LIKES_NUMBER = 15;
 var MAX_LIKES_NUMBER = 200;
@@ -102,3 +103,31 @@ var getFilledPicturesFragment = function () {
 
 var picturesBlock = document.querySelector('.pictures');
 picturesBlock.appendChild(getFilledPicturesFragment());
+
+var selectImageForm = document.querySelector('#upload-select-image');
+var uploadFileInput = document.querySelector('#upload-file');
+var imageEditPopup = document.querySelector('.img-upload__overlay');
+
+var closeImageEditPopup = function () {
+  imageEditPopup.classList.add('hidden');
+  selectImageForm.reset();
+};
+
+var openImageEditPopup = function () {
+  imageEditPopup.classList.remove('hidden');
+};
+
+uploadFileInput.addEventListener('change', function () {
+  var closeImageEditPopupButton = imageEditPopup.querySelector('#upload-cancel');
+
+  openImageEditPopup();
+
+  document.addEventListener('keydown', function (evt) {
+    if (evt.key === ESC_KEY) {
+      closeImageEditPopup();
+    }
+  });
+  closeImageEditPopupButton.addEventListener('click', function () {
+    closeImageEditPopup();
+  });
+});
