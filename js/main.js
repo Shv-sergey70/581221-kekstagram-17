@@ -22,6 +22,7 @@ var COMMENTS_USER_NAMES = [
   'Варвара',
   'Мария'
 ];
+var MAX_PERCENT = 100;
 
 var generateRandomIntegerInRange = function (min, max) {
   return Math.floor((Math.random() * (max + 1 - min)) + min);
@@ -130,4 +131,109 @@ uploadFileInput.addEventListener('change', function () {
   closeImageEditPopupButton.addEventListener('click', function () {
     closeImageEditPopup();
   });
+});
+
+var filters = {
+  'effect-none': {
+    id: 'effect-none',
+    class: 'effects__preview--none',
+    cssEffect: ''
+  },
+  'effect-chrome': {
+    id: 'effect-chrome',
+    class: 'effects__preview--chrome',
+    cssEffect: 'grayscale',
+    min: 0,
+    max: 1
+  },
+  'effect-sepia': {
+    id: 'effect-sepia',
+    class: 'effects__preview--sepia',
+    cssEffect: 'sepia',
+    min: 0,
+    max: 1
+  },
+  'effect-marvin': {
+    id: 'effect-marvin',
+    class: 'effects__preview--marvin',
+    cssEffect: 'invert',
+  },
+  'effect-phobos': {
+    id: 'effect-phobos',
+    class: 'effects__preview--phobos',
+    cssEffect: 'blur',
+    min: 0,
+    max: 3
+  },
+  'effect-heat': {
+    id: 'effect-heat',
+    class: 'effects__preview--heat',
+    cssEffect: 'brightness',
+    min: 1,
+    max: 3
+  }
+};
+
+var getFilterDepth = function (percent, min, max) {
+  return (Number(max * percent / MAX_PERCENT) + min).toFixed(2);
+};
+
+var resetFilter = function (image) {
+  for (var filter in filters) {
+    if (image.classList.contains(filters[filter]['class'])) {
+      image.classList.remove(filters[filter]['class']);
+    }
+  }
+};
+
+var getCssFilter = function (image, percent) {
+  var filterStyle;
+  switch (true) {
+    case image.classList.contains(filters['effect-chrome']['class']): {
+      filterStyle = filters['effect-chrome']['cssEffect'] + '(' + getFilterDepth(percent, filters['effect-chrome']['min'], filters['effect-chrome']['max']) + ')';
+      break;
+    }
+    case image.classList.contains(filters['effect-sepia']['class']): {
+      filterStyle = filters['effect-sepia']['cssEffect'] + '(' + getFilterDepth(percent, filters['effect-sepia']['min'], filters['effect-sepia']['max']) + ')';
+      break;
+    }
+    case image.classList.contains(filters['effect-marvin']['class']): {
+      filterStyle = filters['effect-marvin']['cssEffect'] + '(' + percent.toFixed(2) + '%)';
+      break;
+    }
+    case image.classList.contains(filters['effect-phobos']['class']): {
+      filterStyle = filters['effect-phobos']['cssEffect'] + '(' + getFilterDepth(percent, filters['effect-phobos']['min'], filters['effect-phobos']['max']) + 'px)';
+      break;
+    }
+    case image.classList.contains(filters['effect-heat']['class']): {
+      filterStyle = filters['effect-heat']['cssEffect'] + '(' + getFilterDepth(percent, filters['effect-heat']['min'], filters['effect-heat']['max']) + ')';
+      break;
+    }
+    default: {
+      filterStyle = filters['effect-none']['cssEffect'];
+    }
+  }
+
+  return filterStyle;
+};
+
+var effectsList = document.querySelector('.effects__list');
+var uploadImageBlock = document.querySelector('.img-upload__preview');
+var effectsLine = document.querySelector('.effect-level');
+
+effectsList.addEventListener('click', function (evt) {
+  if (evt.target.classList.contains('effects__radio')) {
+    resetFilter(uploadImageBlock);
+    var filter = evt.target;
+
+    if (filter.id === filters['effect-none']['id']) {
+      effectsLine.classList.add('hidden');
+    } else {
+      effectsLine.classList.remove('hidden');
+    }
+
+    var filterData = filters[filter.id];
+    uploadImageBlock.classList.add(filterData['class']);
+    uploadImageBlock.style = getCssFilter(uploadImageBlock, MAX_PERCENT);
+  }
 });
