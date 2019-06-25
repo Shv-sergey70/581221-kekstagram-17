@@ -220,7 +220,44 @@ var getCssFilter = function (image, percent) {
 
 var effectsList = document.querySelector('.effects__list');
 var uploadImageBlock = document.querySelector('.img-upload__preview');
-var effectsLine = document.querySelector('.effect-level');
+var effectsLevelFieldset = document.querySelector('.effect-level');
+var effectsLevelLine = document.querySelector('.effect-level__line');
+var effectsLevelPin = document.querySelector('.effect-level__pin');
+var effectsLevelDepthLine = document.querySelector('.effect-level__depth');
+
+var moveSliderPin = function (movingCoordinate) {
+  effectsLevelPin.style.left = movingCoordinate + 'px';
+  effectsLevelDepthLine.style.width = movingCoordinate + 'px';
+};
+
+effectsLevelPin.addEventListener('mousedown', function (mouseDownEvt) {
+  var effectDepth = {
+    min: 0,
+    max: effectsLevelLine.offsetWidth,
+    percent: MAX_PERCENT
+  };
+  var startCoordinate = mouseDownEvt.clientX;
+
+  var onSliderMouseMove = function (mouseMoveEvt) {
+    var shift = startCoordinate - mouseMoveEvt.clientX;
+
+    startCoordinate = mouseMoveEvt.clientX;
+    var pinShifting = effectsLevelPin.offsetLeft - shift;
+
+    if (pinShifting >= effectDepth.min && pinShifting <= effectDepth.max) {
+      moveSliderPin(pinShifting);
+    }
+
+    effectDepth.percent = pinShifting * MAX_PERCENT / effectDepth.max;
+    uploadImageBlock.style.filter = getCssFilter(uploadImageBlock, effectDepth.percent);
+  };
+  var onSliderMouseUp = function () {
+    document.removeEventListener('mousemove', onSliderMouseMove);
+    document.removeEventListener('mouseup', onSliderMouseUp);
+  };
+  document.addEventListener('mousemove', onSliderMouseMove);
+  document.addEventListener('mouseup', onSliderMouseUp);
+});
 
 effectsList.addEventListener('click', function (evt) {
   if (evt.target.classList.contains('effects__radio')) {
@@ -228,13 +265,14 @@ effectsList.addEventListener('click', function (evt) {
     var filter = evt.target;
 
     if (filter.id === filters['effect-none']['id']) {
-      effectsLine.classList.add('hidden');
+      effectsLevelFieldset.classList.add('hidden');
     } else {
-      effectsLine.classList.remove('hidden');
+      effectsLevelFieldset.classList.remove('hidden');
     }
 
     var filterData = filters[filter.id];
     uploadImageBlock.classList.add(filterData['class']);
-    uploadImageBlock.style = getCssFilter(uploadImageBlock, MAX_PERCENT);
+    uploadImageBlock.style.filter = getCssFilter(uploadImageBlock, MAX_PERCENT);
+    moveSliderPin(effectsLevelLine.offsetWidth);
   }
 });
