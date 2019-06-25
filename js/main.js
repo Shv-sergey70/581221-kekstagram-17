@@ -108,6 +108,7 @@ picturesBlock.appendChild(getFilledPicturesFragment());
 var selectImageForm = document.querySelector('#upload-select-image');
 var uploadFileInput = document.querySelector('#upload-file');
 var imageEditPopup = document.querySelector('.img-upload__overlay');
+var commentTextarea = document.querySelector('[name="description"]');
 
 var closeImageEditPopup = function () {
   imageEditPopup.classList.add('hidden');
@@ -124,7 +125,7 @@ uploadFileInput.addEventListener('change', function () {
   openImageEditPopup();
 
   document.addEventListener('keydown', function (evt) {
-    if (evt.key === ESC_KEY) {
+    if (evt.key === ESC_KEY && evt.target !== commentTextarea) {
       closeImageEditPopup();
     }
   });
