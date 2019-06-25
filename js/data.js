@@ -58,7 +58,7 @@
     return {
       url: 'photos/' + i + '.jpg',
       likes: window.utility.generateRandomIntegerInRange(MIN_LIKES_NUMBER, MAX_LIKES_NUMBER),
-      comment: generateComments(window.utility.generateRandomIntegerInRange(1, 4))
+      comments: generateComments(window.utility.generateRandomIntegerInRange(1, 4))
     };
   };
 
