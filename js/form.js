@@ -107,6 +107,7 @@
     var startCoordinate = mouseDownEvt.clientX;
 
     var onSliderMouseMove = function (mouseMoveEvt) {
+      mouseMoveEvt.preventDefault();
       var shift = startCoordinate - mouseMoveEvt.clientX;
 
       startCoordinate = mouseMoveEvt.clientX;
