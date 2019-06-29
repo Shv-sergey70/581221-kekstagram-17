@@ -48,6 +48,7 @@
     renderOtherUsersPictures(picturesArray);
 
     window.activateOtherUsersPicturesFilter(picturesArray);
+    window.renderBigPicture(picturesArray);
   };
 
   window.backend.load('//js.dump.academy/kekstagram/data', onSuccess, onError);
