@@ -8,5 +8,20 @@ window.utility = {
   },
   getRandomElementFromArray: function (arr) {
     return arr[this.generateRandomIntegerInRange(0, arr.length)];
+  },
+  debounce: function (milliseconds) {
+    var lastTimeout;
+
+    return function (callback) {
+      var args = arguments;
+
+      if (lastTimeout !== undefined) {
+        clearTimeout(lastTimeout);
+      }
+
+      lastTimeout = setTimeout(function () {
+        callback.apply(null, args);
+      }, milliseconds);
+    };
   }
 };
