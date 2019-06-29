@@ -1,34 +1,53 @@
 'use strict';
 
 (function () {
-  // var picturesArray = window.generateUsersPhotoData(); // if we will need in mock-data
+
+  var picturesBlock = document.querySelector('.pictures');
+
+  var renderOtherUsersPictures = function (picturesArray) {
+    picturesBlock.appendChild(getFilledPicturesFragment(picturesArray));
+  };
+
+  window.rerenderOtherUsersPictures = function (picturesArray) {
+    var otherUsersPictures = picturesBlock.querySelectorAll('.picture');
+    otherUsersPictures.forEach(function (value) {
+      value.remove();
+    });
+    renderOtherUsersPictures(picturesArray);
+  };
+
+  var generatePictureDomElement = function (template, pictureData) {
+    template.querySelector('.picture__img').src = pictureData.url;
+    template.querySelector('.picture__likes').innerText = pictureData.likes;
+    template.querySelector('.picture__comments').innerText = pictureData.comments.length;
+
+    return template;
+  };
+
+  var getFilledPicturesFragment = function (picturesArray) {
+    var picturesFragment = document.createDocumentFragment();
+
+    for (var i = 0; i < picturesArray.length; i++) {
+      var template = document.querySelector('#picture').content.querySelector('.picture').cloneNode(true);
+      picturesFragment.appendChild(generatePictureDomElement(template, picturesArray[i]));
+    }
+
+    return picturesFragment;
+  };
 
   var onError = function (message) {
     console.error(message);
+    renderPage(window.generateUsersPhotoData());
   };
 
-  var onSuccess = function (picturesArray) {
-    var generatePictureDomElement = function (template, pictureData) {
-      template.querySelector('.picture__img').src = pictureData.url;
-      template.querySelector('.picture__likes').innerText = pictureData.likes;
-      template.querySelector('.picture__comments').innerText = pictureData.comments.length;
+  var onSuccess = function (serverPicturesArray) {
+    renderPage(serverPicturesArray);
+  };
 
-      return template;
-    };
+  var renderPage = function (picturesArray) {
+    renderOtherUsersPictures(picturesArray);
 
-    var getFilledPicturesFragment = function () {
-      var picturesFragment = document.createDocumentFragment();
-
-      for (var i = 0; i < picturesArray.length; i++) {
-        var template = document.querySelector('#picture').content.querySelector('.picture').cloneNode(true);
-        picturesFragment.appendChild(generatePictureDomElement(template, picturesArray[i]));
-      }
-
-      return picturesFragment;
-    };
-
-    var picturesBlock = document.querySelector('.pictures');
-    picturesBlock.appendChild(getFilledPicturesFragment());
+    window.activateOtherUsersPicturesFilter(picturesArray);
   };
 
   window.backend.load('//js.dump.academy/kekstagram/data', onSuccess, onError);
