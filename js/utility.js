@@ -24,14 +24,15 @@ window.utility = {
       }, milliseconds);
     };
   },
-  onEscKeydown: function (evtKeydown) {
-    if (evtKeydown.key === window.utility.ESC_KEY) {
-      var commentTextarea = document.querySelector('[name="description"]');
+  arrayHasDuplicates: function (array) {
+    var lowercaseArray = array.map(function (item) {
+      return item.toLowerCase();
+    });
 
-      if (evtKeydown.target !== commentTextarea) {
-        window.closeImageEditPopup();
-      }
-      window.closeBigPictureBlock();
-    }
+    var duplicates = lowercaseArray.filter(function (elem, pos, arr) {
+      return pos !== arr.indexOf(elem) || pos !== arr.lastIndexOf(elem);
+    });
+
+    return duplicates.length > 0;
   }
 };

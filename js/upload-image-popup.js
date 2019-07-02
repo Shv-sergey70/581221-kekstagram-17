@@ -9,7 +9,7 @@
   window.closeImageEditPopup = function () {
     imageEditPopup.classList.add('hidden');
     selectImageForm.reset();
-    document.removeEventListener('keydown', window.utility.onEscKeydown);
+    document.removeEventListener('keydown', onEscKeydown);
     closeImageEditPopupButton.removeEventListener('click', oncloseImageEditPopupClick);
   };
 
@@ -21,10 +21,21 @@
     window.closeImageEditPopup();
   };
 
+  var onEscKeydown = function (evtKeydown) {
+    if (evtKeydown.key === window.utility.ESC_KEY) {
+      var hashtagsInput = document.querySelector('[name="hashtags"]');
+      var commentTextarea = document.querySelector('[name="description"]');
+
+      if (evtKeydown.target !== commentTextarea && evtKeydown.target !== hashtagsInput) {
+        window.closeImageEditPopup();
+      }
+    }
+  };
+
   uploadFileInput.addEventListener('change', function () {
     openImageEditPopup();
 
-    document.addEventListener('keydown', window.utility.onEscKeydown);
+    document.addEventListener('keydown', onEscKeydown);
     closeImageEditPopupButton.addEventListener('click', oncloseImageEditPopupClick);
   });
 })();

@@ -45,13 +45,18 @@
     var onBigPictureCloseButtonClick = function () {
       window.closeBigPictureBlock();
     };
+    var onEscKeydown = function (evtKeydown) {
+      if (evtKeydown.key === window.utility.ESC_KEY) {
+        window.closeBigPictureBlock();
+      }
+    };
     bigPictureCloseButton.addEventListener('click', onBigPictureCloseButtonClick);
-    document.addEventListener('keydown', window.utility.onEscKeydown);
+    document.addEventListener('keydown', onEscKeydown);
 
     window.closeBigPictureBlock = function () {
       bigPictureBlock.classList.add('hidden');
       bigPictureCloseButton.removeEventListener('click', onBigPictureCloseButtonClick);
-      document.removeEventListener('keydown', window.utility.onEscKeydown);
+      document.removeEventListener('keydown', onEscKeydown);
     };
   };
 })();
