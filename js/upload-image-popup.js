@@ -4,29 +4,27 @@
   var selectImageForm = document.querySelector('#upload-select-image');
   var uploadFileInput = document.querySelector('#upload-file');
   var imageEditPopup = document.querySelector('.img-upload__overlay');
-  var commentTextarea = document.querySelector('[name="description"]');
+  var closeImageEditPopupButton = imageEditPopup.querySelector('#upload-cancel');
 
-  var closeImageEditPopup = function () {
+  window.closeImageEditPopup = function () {
     imageEditPopup.classList.add('hidden');
     selectImageForm.reset();
+    document.removeEventListener('keydown', window.utility.onEscKeydown);
+    closeImageEditPopupButton.removeEventListener('click', oncloseImageEditPopupClick);
   };
 
   var openImageEditPopup = function () {
     imageEditPopup.classList.remove('hidden');
   };
 
-  uploadFileInput.addEventListener('change', function () {
-    var closeImageEditPopupButton = imageEditPopup.querySelector('#upload-cancel');
+  var oncloseImageEditPopupClick = function () {
+    window.closeImageEditPopup();
+  };
 
+  uploadFileInput.addEventListener('change', function () {
     openImageEditPopup();
 
-    document.addEventListener('keydown', function (evt) {
-      if (evt.key === window.utility.ESC_KEY && evt.target !== commentTextarea) {
-        closeImageEditPopup();
-      }
-    });
-    closeImageEditPopupButton.addEventListener('click', function () {
-      closeImageEditPopup();
-    });
+    document.addEventListener('keydown', window.utility.onEscKeydown);
+    closeImageEditPopupButton.addEventListener('click', oncloseImageEditPopupClick);
   });
 })();

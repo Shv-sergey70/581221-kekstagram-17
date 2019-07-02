@@ -23,5 +23,15 @@ window.utility = {
         callback.apply(null, args);
       }, milliseconds);
     };
+  },
+  onEscKeydown: function (evtKeydown) {
+    if (evtKeydown.key === window.utility.ESC_KEY) {
+      var commentTextarea = document.querySelector('[name="description"]');
+
+      if (evtKeydown.target !== commentTextarea) {
+        window.closeImageEditPopup();
+      }
+      window.closeBigPictureBlock();
+    }
   }
 };
