@@ -12,10 +12,17 @@
     var bigPictureShowCommentsCountBlock = bigPictureBlock.querySelector('.social__comment-count');
     var bigPictureCommentsLoaderBlock = bigPictureBlock.querySelector('.comments-loader');
 
+    var clearCommentsBlock = function () {
+      bigPictureCommentsBlock.textContent = '';
+    };
+
     bigPictureImg.src = pictureData.url;
     bigPictureDescriptionBlock.textContent = pictureData.description;
     bigPictureLikesCountBlock.textContent = pictureData.likes;
     bigPictureTotalCommentsBlock.textContent = pictureData.comments.length;
+    clearCommentsBlock();
+
+    var commentsFragment = document.createDocumentFragment();
 
     pictureData.comments.forEach(function (commentData) {
       var comment = commentTemplate.cloneNode(true);
@@ -25,8 +32,10 @@
       commentImg.src = commentData.avatar;
       commentTextBlock.textContent = commentData.message;
 
-      bigPictureCommentsBlock.appendChild(comment);
+      commentsFragment.appendChild(comment);
     });
+
+    bigPictureCommentsBlock.appendChild(commentsFragment);
     bigPictureShowCommentsCountBlock.classList.add('visually-hidden');
     bigPictureCommentsLoaderBlock.classList.add('visually-hidden');
     bigPictureBlock.classList.remove('hidden');
