@@ -147,4 +147,12 @@
       effectLevelInput.value = window.utility.MAX_PERCENT;
     }
   });
+
+  var uploadImageForm = document.querySelector('#upload-select-image');
+  var uploadImageFormSubmitButton = uploadImageForm.querySelector('#upload-submit');
+  var hashtagsInput = document.querySelector('[name="hashtags"]');
+
+  uploadImageFormSubmitButton.addEventListener('click', function () {
+    hashtagsInput.setCustomValidity(window.uploadImageHashtagsValidate());
+  });
 })();
