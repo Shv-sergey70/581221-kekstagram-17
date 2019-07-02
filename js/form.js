@@ -151,8 +151,50 @@
   var uploadImageForm = document.querySelector('#upload-select-image');
   var uploadImageFormSubmitButton = uploadImageForm.querySelector('#upload-submit');
   var hashtagsInput = document.querySelector('[name="hashtags"]');
+  var SEND_UPLOAD_FORM_URL = 'https://js.dump.academy/kekstagram';
 
   uploadImageFormSubmitButton.addEventListener('click', function () {
     hashtagsInput.setCustomValidity(window.uploadImageHashtagsValidate());
+  });
+
+  uploadImageForm.addEventListener('submit', function (evtSubmit) {
+    evtSubmit.preventDefault();
+    var mainTag = document.querySelector('main');
+
+    var onSuccess = function () {
+      var successTemplate = document.querySelector('#success').content.querySelector('.success');
+      var successBlock = successTemplate.cloneNode(true);
+
+      window.closeImageEditPopup();
+      uploadImageForm.reset();
+      mainTag.appendChild(successBlock);
+    };
+    var onError = function () {
+      var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+      var errorBlock = errorTemplate.cloneNode(true);
+
+      console.log(errorBlock);
+      window.closeImageEditPopup();
+      uploadImageForm.reset();
+
+      var closeErrorPopup = function () {
+        errorBlock.remove();
+      };
+      var onEscPress = function (evtKeydown) {
+        if (evtKeydown.key === window.utility.ESC_KEY) {
+          closeErrorPopup();
+        }
+      };
+      var onDocumentClick = function () {
+        closeErrorPopup();
+      };
+
+      document.addEventListener('keydown', onEscPress);
+      document.addEventListener('click', onDocumentClick);
+
+      mainTag.appendChild(errorBlock);
+    };
+
+    window.backend.save(SEND_UPLOAD_FORM_URL, onSuccess, onError);
   });
 })();

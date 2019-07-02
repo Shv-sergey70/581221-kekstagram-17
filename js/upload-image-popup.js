@@ -10,14 +10,14 @@
     imageEditPopup.classList.add('hidden');
     selectImageForm.reset();
     document.removeEventListener('keydown', onEscKeydown);
-    closeImageEditPopupButton.removeEventListener('click', oncloseImageEditPopupClick);
+    closeImageEditPopupButton.removeEventListener('click', onCloseImageEditPopupClick);
   };
 
   var openImageEditPopup = function () {
     imageEditPopup.classList.remove('hidden');
   };
 
-  var oncloseImageEditPopupClick = function () {
+  var onCloseImageEditPopupClick = function () {
     window.closeImageEditPopup();
   };
 
@@ -36,6 +36,6 @@
     openImageEditPopup();
 
     document.addEventListener('keydown', onEscKeydown);
-    closeImageEditPopupButton.addEventListener('click', oncloseImageEditPopupClick);
+    closeImageEditPopupButton.addEventListener('click', onCloseImageEditPopupClick);
   });
 })();
