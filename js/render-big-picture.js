@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.renderBigPicture = function (picturesArray) {
+  window.renderBigPicture = function (pictureData) {
     var bigPictureBlock = document.querySelector('.big-picture');
     var bigPictureImg = bigPictureBlock.querySelector('.big-picture__img img');
     var bigPictureDescriptionBlock = bigPictureBlock.querySelector('.social__caption');
@@ -12,12 +12,12 @@
     var bigPictureShowCommentsCountBlock = bigPictureBlock.querySelector('.social__comment-count');
     var bigPictureCommentsLoaderBlock = bigPictureBlock.querySelector('.comments-loader');
 
-    bigPictureImg.src = picturesArray[0]['url'];
-    bigPictureDescriptionBlock.textContent = picturesArray[0]['description'];
-    bigPictureLikesCountBlock.textContent = picturesArray[0]['likes'];
-    bigPictureTotalCommentsBlock.textContent = picturesArray[0]['comments'].length;
+    bigPictureImg.src = pictureData.url;
+    bigPictureDescriptionBlock.textContent = pictureData.description;
+    bigPictureLikesCountBlock.textContent = pictureData.likes;
+    bigPictureTotalCommentsBlock.textContent = pictureData.comments.length;
 
-    picturesArray[0]['comments'].forEach(function (commentData) {
+    pictureData.comments.forEach(function (commentData) {
       var comment = commentTemplate.cloneNode(true);
       var commentImg = comment.querySelector('img');
       var commentTextBlock = comment.querySelector('.social__text');
@@ -30,5 +30,19 @@
     bigPictureShowCommentsCountBlock.classList.add('visually-hidden');
     bigPictureCommentsLoaderBlock.classList.add('visually-hidden');
     bigPictureBlock.classList.remove('hidden');
+
+    var bigPictureCloseButton = bigPictureBlock.querySelector('#picture-cancel');
+
+    var onBigPictureCloseButtonClick = function () {
+      window.closeBigPictureBlock();
+    };
+    bigPictureCloseButton.addEventListener('click', onBigPictureCloseButtonClick);
+    document.addEventListener('keydown', window.utility.onEscKeydown);
+
+    window.closeBigPictureBlock = function () {
+      bigPictureBlock.classList.add('hidden');
+      bigPictureCloseButton.removeEventListener('click', onBigPictureCloseButtonClick);
+      document.removeEventListener('keydown', window.utility.onEscKeydown);
+    };
   };
 })();
