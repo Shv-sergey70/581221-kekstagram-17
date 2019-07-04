@@ -3,6 +3,7 @@
 window.utility = {
   ESC_KEY: 'Escape',
   MAX_PERCENT: 100,
+  DEFAULT_NUMBER_COMMENTS_FOR_RENDER: 5,
   generateRandomIntegerInRange: function (min, max) {
     return Math.floor((Math.random() * (max + 1 - min)) + min);
   },

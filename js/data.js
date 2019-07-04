@@ -24,13 +24,13 @@
   ];
 
   var getComment = function (comments) {
-    var commentsCopy = comments;
+    var commentsCopy = comments.slice();
     var generatedComments = [];
 
     var numberOfCommentsInOneString = window.utility.generateRandomIntegerInRange(1, 2);
 
     for (var i = 1; i <= numberOfCommentsInOneString; i++) {
-      generatedComments.push(commentsCopy.splice(window.utility.generateRandomIntegerInRange(1, commentsCopy.length), 1));
+      generatedComments.push(commentsCopy.splice(window.utility.generateRandomIntegerInRange(0, commentsCopy.length - 1), 1));
     }
 
     return generatedComments.join(' ');
