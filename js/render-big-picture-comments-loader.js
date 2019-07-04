@@ -2,6 +2,7 @@
 
 (function () {
   window.CommentsLoader = function (commentsArray) {
+    this._DEFAULT_NUMBER_COMMENTS_TO_LOAD = 5;
     this._commentsCount = {
       currentRendered: 0,
       forRender: 0,
@@ -25,7 +26,7 @@
       this._commentsCountSpan.textContent = this._commentsCount.currentRendered;
     };
     this._incrementCommentsForRender = function () {
-      this._commentsCount.forRender += 5;
+      this._commentsCount.forRender += this._DEFAULT_NUMBER_COMMENTS_TO_LOAD;
 
       if (this._commentsCount.forRender > this._commentsCount.total) {
         this._commentsCount.forRender = this._commentsCount.total;
