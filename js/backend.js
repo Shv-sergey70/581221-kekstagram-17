@@ -28,7 +28,6 @@
     },
     save: function (url, formData, onSuccess, onError) {
       var xhr = new XMLHttpRequest();
-      // xhr.responseType = 'json';
       xhr.timeout = 10000;
 
       xhr.addEventListener('load', function () {
