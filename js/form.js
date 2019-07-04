@@ -164,37 +164,76 @@
     var onSuccess = function () {
       var successTemplate = document.querySelector('#success').content.querySelector('.success');
       var successBlock = successTemplate.cloneNode(true);
+      var successButton = successBlock.querySelector('.success__button');
 
       window.closeImageEditPopup();
       uploadImageForm.reset();
+
+      var closeSuccessPopup = function () {
+        successBlock.remove();
+        document.removeEventListener('keydown', onEscPress);
+        successBlock.removeEventListener('click', onSuccessBlockClick);
+        successButton.removeEventListener('click', onSuccessButtonClick);
+      };
+
+      var onEscPress = function (evtKeydown) {
+        if (evtKeydown.key === window.utility.ESC_KEY) {
+          closeSuccessPopup();
+        }
+      };
+      var onSuccessButtonClick = function() {
+        closeSuccessPopup();
+      };
+      var onSuccessBlockClick = function (evtClick) {
+        if (evtClick.target === successBlock) {
+          closeSuccessPopup();
+        }
+      };
+
+      document.addEventListener('keydown', onEscPress);
+      successBlock.addEventListener('click', onSuccessBlockClick);
+
+      successButton.addEventListener('click', onSuccessButtonClick);
       mainTag.appendChild(successBlock);
     };
     var onError = function () {
       var errorTemplate = document.querySelector('#error').content.querySelector('.error');
       var errorBlock = errorTemplate.cloneNode(true);
+      var errorButtonsBlock = errorBlock.querySelector('.error__buttons');
 
-      console.log(errorBlock);
       window.closeImageEditPopup();
       uploadImageForm.reset();
 
+      var onErrorButtonsBlockClick = function (evtClick) {
+        if (evtClick.target.classList.contains('error__button')) {
+          closeErrorPopup();
+        }
+      };
+      errorButtonsBlock.addEventListener('click', onErrorButtonsBlockClick);
+
       var closeErrorPopup = function () {
         errorBlock.remove();
+        document.removeEventListener('keydown', onEscPress);
+        errorBlock.removeEventListener('click', onErrorBlockClick);
+        errorButtonsBlock.removeEventListener('click', onErrorButtonsBlockClick);
       };
       var onEscPress = function (evtKeydown) {
         if (evtKeydown.key === window.utility.ESC_KEY) {
           closeErrorPopup();
         }
       };
-      var onDocumentClick = function () {
-        closeErrorPopup();
+      var onErrorBlockClick = function (evtClick) {
+        if (evtClick.target === errorBlock) {
+          closeErrorPopup();
+        }
       };
 
       document.addEventListener('keydown', onEscPress);
-      document.addEventListener('click', onDocumentClick);
+      errorBlock.addEventListener('click', onErrorBlockClick);
 
       mainTag.appendChild(errorBlock);
     };
 
-    window.backend.save(SEND_UPLOAD_FORM_URL, onSuccess, onError);
+    window.backend.save(SEND_UPLOAD_FORM_URL, new FormData(uploadImageForm), onSuccess, onError);
   });
 })();

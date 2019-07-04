@@ -26,7 +26,7 @@
       xhr.open('GET', url);
       xhr.send();
     },
-    save: function (url, onSuccess, onError) {
+    save: function (url, formData, onSuccess, onError) {
       var xhr = new XMLHttpRequest();
       // xhr.responseType = 'json';
       xhr.timeout = 10000;
@@ -48,7 +48,7 @@
       });
 
       xhr.open('POST', url);
-      xhr.send();
+      xhr.send(formData);
     }
   };
 })();
