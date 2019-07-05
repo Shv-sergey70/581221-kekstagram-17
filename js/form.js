@@ -236,4 +236,24 @@
 
     window.backend.save(SEND_UPLOAD_FORM_URL, new FormData(uploadImageForm), onSuccess, onError);
   });
+
+  var fileChooser = uploadImageForm.querySelector('#upload-file');
+  var uploadImg = uploadImageBlock.querySelector('img');
+  var AVAILABLE_IMAGE_FORMATS = ['jpg', 'png', 'jpeg', 'gif'];
+  fileChooser.addEventListener('change', function () {
+    var file = fileChooser.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var correctImgFormat = AVAILABLE_IMAGE_FORMATS.some(function (format) {
+      return fileName.endsWith(format);
+    });
+
+    if (correctImgFormat) {
+      var fileReader = new FileReader();
+      fileReader.addEventListener('load', function () {
+        uploadImg.src = fileReader.result;
+      });
+      fileReader.readAsDataURL(file);
+    }
+  });
 })();
